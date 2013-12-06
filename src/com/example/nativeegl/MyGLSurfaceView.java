@@ -12,7 +12,6 @@ import android.view.SurfaceHolder;
 public class MyGLSurfaceView extends GLSurfaceView {
 
     GLSurfaceView.Renderer mRenderer;
-    private boolean goNative;
 
     /**
      * TODO Put here a description of what this constructor does.
@@ -22,9 +21,8 @@ public class MyGLSurfaceView extends GLSurfaceView {
      */
     public MyGLSurfaceView(Context context, boolean goNative) {
         super(context);
-        this.goNative = goNative;
         // TODO Auto-generated constructor stub.
-        mRenderer = new MyRenderer(goNative);
+        mRenderer = new MyRenderer();
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(mRenderer);
     }
@@ -32,7 +30,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
         // TODO Auto-generated method stub.
-        if (!goNative) {
             queueEvent(new Runnable() {
                 public void run() {
                     ((MyRenderer) mRenderer).setColor(event.getX() / getWidth(), event.getY()
@@ -40,8 +37,5 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 }
             });
             return true;
-        } else {
-            return false;
-        }
     }
 }

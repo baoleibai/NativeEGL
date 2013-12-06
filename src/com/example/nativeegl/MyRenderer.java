@@ -24,16 +24,13 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private float _green = 0.2f;
     private float _blue = 0.2f;
 
-    private boolean goNative;
-
     /**
      * TODO Put here a description of what this constructor does.
      * 
      * @param goNative
      */
-    public MyRenderer(boolean goNative) {
+    public MyRenderer() {
         // TODO Auto-generated constructor stub.
-        goNative = goNative;
     }
 
     private native String nativeGetHelloString();
@@ -49,19 +46,17 @@ public class MyRenderer implements GLSurfaceView.Renderer {
        nativeDrawFrame();
 
         Log.d(TAG, "onDrawFrame " + nativeGetHelloString());
-        if (!goNative) {
             // define the color we want to be displayed as the "clipping wall"
             gl.glClearColor(_red, _green, _blue, 1.0f);
             // clear the color buffer to show the ClearColor we called above...
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-        }
+        
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         nativeSurfaceChanged(width,height);
         Log.d(TAG, "onSurfaceChanged");
-        if (!goNative) {
             // Sets the current view port to the new size.
             gl.glViewport(0, 0, width, height);// OpenGL docs.
 
@@ -73,20 +68,19 @@ public class MyRenderer implements GLSurfaceView.Renderer {
             // gl.glOrthof(0, width,0,height,0,10);
             // Calculate the aspect ratio of the window
             GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
-
+            
             // Select the modelview matrix
             gl.glMatrixMode(GL10.GL_MODELVIEW);// OpenGL docs.
 
             // Reset the modelview matrix
             gl.glLoadIdentity();// OpenGL docs.
-        }
+        
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         nativeSurfaceCreated();
         Log.d(TAG, "onSurfaceCreate");
-        if (!goNative) {
             // Set the background color to black ( rgba ).
             gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f); // OpenGL docs.
 
@@ -104,7 +98,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
 
             // Really nice perspective calculations.
             gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-        }
+            
+            gl.glHint(GL10.GL_POINT_SMOOTH_HINT,GL10.GL_NICEST);
+        
     }
 
     public void setColor(float r, float g, float b) {
