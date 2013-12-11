@@ -2,6 +2,7 @@
 package com.example.nativeegl;
 
 import android.R.integer;
+import android.R.layout;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.Log;
@@ -21,14 +22,19 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private float _green = 0.2f;
     private float _blue = 0.2f;
 
-    Rectangle mRectangle = new Rectangle();
-
+    private Rectangle mRectangle;
+    private FlatColorRectangle mFlatColorRectangle;
+    private SmoothColorRect mSmoothColorRect;
+    
     /**
      * TODO Put here a description of what this constructor does.
      * 
      * @param goNative
      */
     public MyRenderer() {
+        mRectangle = new Rectangle();
+        mFlatColorRectangle = new FlatColorRectangle();
+        mSmoothColorRect = new SmoothColorRect();
         // TODO Auto-generated constructor stub.
     }
 
@@ -43,62 +49,39 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         nativeDrawFrame();
-
         Log.d(TAG, "onDrawFrame " + nativeGetHelloString());
-        // define the color we want to be displayed as the "clipping wall"
-        //gl.glClearColor(_red, _green, _blue, 1.0f);
-        // clear the color buffer to show the ClearColor we called above...
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-
-        mRectangle.draw(gl); // ( NEW )
+        gl.glTranslatef(0,0,-10.0f);
+        
+        //mRectangle.draw(gl); // ( NEW )
+        //mFlatColorRectangle.draw(gl);
+        mSmoothColorRect.draw(gl);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         nativeSurfaceChanged(width, height);
         Log.d(TAG, "onSurfaceChanged");
-        // Sets the current view port to the new size.
-        gl.glViewport(0, 0, width, height);// OpenGL docs.
-
-        // Select the projection matrix
-        gl.glMatrixMode(GL10.GL_PROJECTION);// OpenGL docs.
-
-        // Reset the projection matrix
-        gl.glLoadIdentity();// OpenGL docs.]
-        // gl.glOrthof(0, width,0,height,0,10);
-        // Calculate the aspect ratio of the window
-        GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100.0f);
-
-        // Select the modelview matrix
-        gl.glMatrixMode(GL10.GL_MODELVIEW);// OpenGL docs.
-
-        // Reset the modelview matrix
-        gl.glLoadIdentity();// OpenGL docs.
+        gl.glViewport(0, 0, width, height);
+        gl.glMatrixMode(GL10.GL_PROJECTION);
+        gl.glLoadIdentity();
+        GLU.gluPerspective(gl, 45.0f, (float) width / (float) height, 0.1f, 100f);
+        gl.glMatrixMode(gl.GL_MODELVIEW);
+        gl.glLoadIdentity();
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         nativeSurfaceCreated();
         Log.d(TAG, "onSurfaceCreate");
-        gl.glClearColor(0f,0f,0f,0.5f);
-        
-        // Enable Smooth Shading, default not really needed.
-        gl.glShadeModel(GL10.GL_SMOOTH);// OpenGL docs.
+        gl.glClearColor(0, 0, 0, 1);
+        gl.glShadeModel(gl.GL_SMOOTH);
 
-        // Depth buffer setup.
-        gl.glClearDepthf(1.0f);// OpenGL docs.
-
-        // Enables depth testing.
-        gl.glEnable(GL10.GL_DEPTH_TEST);// OpenGL docs.
-
-        // The type of depth testing to do.
-        gl.glDepthFunc(GL10.GL_LEQUAL);// OpenGL docs.
-        
-        // Really nice perspective calculations.
-        gl.glHint(GL10.GL_PERSPECTIVE_CORRECTION_HINT, GL10.GL_NICEST);
-
-        gl.glHint(GL10.GL_POINT_SMOOTH_HINT, GL10.GL_NICEST);
+        gl.glClearDepthf(1.0f);
+        gl.glEnable(gl.GL_DEPTH_TEST);
+        gl.glDepthFunc(gl.GL_LEQUAL);
+        gl.glHint(gl.GL_PERSPECTIVE_CORRECTION_HINT, gl.GL_NICEST);
     }
 
     public void setColor(float r, float g, float b) {

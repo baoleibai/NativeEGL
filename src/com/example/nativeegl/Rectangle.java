@@ -15,32 +15,25 @@ import javax.microedition.khronos.opengles.GL10;
  * @author b576. Created Dec 6, 2013.
  */
 public class Rectangle {
-    private FloatBuffer gVertexBuffer, gColorBuffer;
+    private FloatBuffer gVerticesBuffer, gColorBuffer;
     private ShortBuffer gIndicesBuffer;
-    private float gRotateAngle;
+    private float roatef;
 
     /**
      * TODO Put here a description of what this constructor does.
-     *
      */
     public Rectangle() {
-        ByteBuffer vbb = ByteBuffer.allocateDirect(gVertices.length * 4);
+        ByteBuffer vbb = ByteBuffer.allocateDirect(this.gVertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
-        gVertexBuffer = vbb.asFloatBuffer();
-        gVertexBuffer.put(gVertices);
-        gVertexBuffer.position(0);
+        this.gVerticesBuffer = vbb.asFloatBuffer();
+        this.gVerticesBuffer.put(this.gVertices);
+        this.gVerticesBuffer.position(0);
 
-        ByteBuffer cbb = ByteBuffer.allocateDirect(gColors.length * 4);
-        cbb.order(ByteOrder.nativeOrder());
-        gColorBuffer = cbb.asFloatBuffer();
-        gColorBuffer.put(gColors);
-        gColorBuffer.position(0);
-
-        ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * 2);
+        ByteBuffer ibb = ByteBuffer.allocateDirect(this.indices.length * 2);
         ibb.order(ByteOrder.nativeOrder());
-        gIndicesBuffer = ibb.asShortBuffer();
-        gIndicesBuffer.put(indices);
-        gIndicesBuffer.position(0);
+        this.gIndicesBuffer = ibb.asShortBuffer();
+        this.gIndicesBuffer.put(this.indices);
+        this.gIndicesBuffer.position(0);
     }
 
     private static float gVertices[] = {
@@ -50,23 +43,6 @@ public class Rectangle {
             1f, 1f, 0f,
     };
 
-    private static float gColors[] = {
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-
-            1.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 1.0f, 1.0f,
-            0.0f, 1.0f, 0.0f, 1.0f,
-    };
     // The order we like to connect them.
     private short[] indices = {
             0, 1, 2,
@@ -75,54 +51,34 @@ public class Rectangle {
 
     @SuppressWarnings("javadoc")
     public void draw(javax.microedition.khronos.opengles.GL10 gl) {
-        // push the matrics into 5 depth of the screen.
-        gl.glTranslatef(0, 0, -10);
-        // Counter-clockwise winding.
-        gl.glFrontFace(GL10.GL_CCW); // OpenGL docs
-        // Enable face culling.
-        gl.glEnable(GL10.GL_CULL_FACE); // OpenGL docs
-        // What faces to remove with the face culling.
-        gl.glCullFace(GL10.GL_BACK); // OpenGL docs
-        
+        gl.glFrontFace(gl.GL_CCW);
+        gl.glEnable(gl.GL_CULL_FACE);
+        gl.glCullFace(gl.GL_BACK);
+
         gl.glPushMatrix();
-        gl.glTranslatef(2,0,0);
-        gl.glRotatef(50.0f,0,0,1);
-        gl.glScalef(0.5f,0.5f,0.5f);
+        gl.glTranslatef(2, 0, 0);
+        gl.glScalef(0.5f, 0.5f, 0.5f);
+        gl.glRotatef(this.roatef, 1, 0, 0);
         this.drawRect(gl);
         gl.glPopMatrix();
-        
-        gl.glPushMatrix();  //duplicate the current top stack and push it into the stack.
-        gl.glTranslatef(-2,0,0);
-        gl.glRotatef(this.gRotateAngle,0,0,1);
-        gl.glScalef(0.5f,0.5f,0.5f);
-        this.drawRect(gl);
-        gl.glPopMatrix();
-        
+
         gl.glPushMatrix();
-        gl.glTranslatef(0,0,0);
-        gl.glRotatef(this.gRotateAngle,1,0,0);
-        gl.glScalef(0.8f,0.8f,0.8f);
+        gl.glScalef(0.5f, 0.5f, 0.5f);
+        gl.glTranslatef(-2f,0,0);
+        gl.glRotatef(this.roatef,0,1,0);
         this.drawRect(gl);
         gl.glPopMatrix();
         
-        this.gRotateAngle +=1.0f;
+        gl.glDisable(gl.GL_CULL_FACE);
+        this.roatef += 1.5f;
     }
 
     private void drawRect(GL10 gl) {
-        // Enabled the vertices buffer for writing and to be used during
-        // rendering.
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);// OpenGL docs.
-        // Specifies the location and data format of an array of vertex
-        // coordinates to use when rendering.
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, // OpenGL docs
-                gVertexBuffer);
+        gl.glEnableClientState(gl.GL_VERTEX_ARRAY);
+        gl.glVertexPointer(3, gl.GL_FLOAT, 0, this.gVerticesBuffer);
+        gl.glDrawElements(gl.GL_TRIANGLES, this.indices.length, gl.GL_UNSIGNED_SHORT,
+                this.gIndicesBuffer);
 
-        gl.glDrawElements(GL10.GL_TRIANGLES, indices.length,// OpenGL docs
-                GL10.GL_UNSIGNED_SHORT, gIndicesBuffer);
-
-        // Disable the vertices buffer.
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY); // OpenGL docs
-        // Disable face culling.
-        gl.glDisable(GL10.GL_CULL_FACE); // OpenGL docs
+        gl.glDisableClientState(gl.GL_VERTEX_ARRAY);
     }
 }
