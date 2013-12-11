@@ -30,12 +30,12 @@ public class MyGLSurfaceView extends GLSurfaceView {
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
         // TODO Auto-generated method stub.
-            queueEvent(new Runnable() {
-                public void run() {
-                    ((MyRenderer) mRenderer).setColor(event.getX() / getWidth(), event.getY()
-                            / getHeight(), 1.0f);
-                }
-            });
-            return true;
+        queueEvent(new Runnable() {
+            public void run() {
+                ((MyRenderer) mRenderer).setColor(event.getX() / getWidth(), event.getY()
+                        / getHeight(), 1.0f);
+            }
+        });
+        return true;
     }
 }
