@@ -25,6 +25,7 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private Rectangle mRectangle;
     private FlatColorRectangle mFlatColorRectangle;
     private SmoothColorRect mSmoothColorRect;
+    private ThreeDimentionRectangle rectangle3D;
     
     /**
      * TODO Put here a description of what this constructor does.
@@ -35,6 +36,8 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         mRectangle = new Rectangle();
         mFlatColorRectangle = new FlatColorRectangle();
         mSmoothColorRect = new SmoothColorRect();
+        
+        rectangle3D = new ThreeDimentionRectangle();
         // TODO Auto-generated constructor stub.
     }
 
@@ -52,11 +55,14 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         Log.d(TAG, "onDrawFrame " + nativeGetHelloString());
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
-        gl.glTranslatef(0,0,-10.0f);
+        gl.glTranslatef(0,0,-4.0f);
         
         //mRectangle.draw(gl); // ( NEW )
         //mFlatColorRectangle.draw(gl);
-        mSmoothColorRect.draw(gl);
+        //mSmoothColorRect.draw(gl);
+        
+        //3D objects
+        rectangle3D.draw(gl);
     }
 
     @Override
