@@ -3,12 +3,21 @@ package com.example.nativeegl;
 
 import android.R.integer;
 import android.R.layout;
+import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.Log;
 import java.nio.IntBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import org.w3c.dom.Text;
+
+import com.example.nativeegl.mesh.Texture;
+import com.example.nativeegl.mesh.ThreeDimentionRectangle;
+import com.example.nativeegl.plane.FlatColorRectangle;
+import com.example.nativeegl.plane.Rectangle;
+import com.example.nativeegl.plane.SmoothColorRect;
 
 /**
  * TODO Put here a description of what this class does.
@@ -21,23 +30,24 @@ public class MyRenderer implements GLSurfaceView.Renderer {
     private float _red = 0.9f;
     private float _green = 0.2f;
     private float _blue = 0.2f;
-
     private Rectangle mRectangle;
     private FlatColorRectangle mFlatColorRectangle;
     private SmoothColorRect mSmoothColorRect;
     private ThreeDimentionRectangle rectangle3D;
-    
+    private Texture mTexture;
     /**
      * TODO Put here a description of what this constructor does.
      * 
      * @param goNative
      */
-    public MyRenderer() {
+    public MyRenderer(Context context) {
         mRectangle = new Rectangle();
         mFlatColorRectangle = new FlatColorRectangle();
         mSmoothColorRect = new SmoothColorRect();
         
         rectangle3D = new ThreeDimentionRectangle();
+        
+        mTexture = new Texture(context);
         // TODO Auto-generated constructor stub.
     }
 
@@ -60,9 +70,9 @@ public class MyRenderer implements GLSurfaceView.Renderer {
         //mRectangle.draw(gl); // ( NEW )
         //mFlatColorRectangle.draw(gl);
         //mSmoothColorRect.draw(gl);
-        
         //3D objects
-        rectangle3D.draw(gl);
+        //rectangle3D.draw(gl);
+        mTexture.draw(gl);
     }
 
     @Override

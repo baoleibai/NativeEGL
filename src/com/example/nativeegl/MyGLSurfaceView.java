@@ -22,7 +22,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
     public MyGLSurfaceView(Context context, boolean goNative) {
         super(context);
         // TODO Auto-generated constructor stub.
-        mRenderer = new MyRenderer();
+        mRenderer = new MyRenderer(context);
         // Set the Renderer for drawing on the GLSurfaceView
         setRenderer(mRenderer);
     }

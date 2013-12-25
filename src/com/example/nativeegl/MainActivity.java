@@ -4,6 +4,8 @@ package com.example.nativeegl;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.Menu;
 import android.view.Window;
@@ -24,7 +26,6 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); // (NEW)
 
         mGLView = new MyGLSurfaceView(this, goNative);
-
         setContentView(mGLView);
     }
 }
